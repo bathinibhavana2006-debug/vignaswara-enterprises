@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Vigneswara Enterprises | Complete Billing System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            color: #1a202c;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .navbar-menu {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .nav-item {
+            color: #e2e8f0;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.2s;
+            font-weight: 500;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: #4c6ef5;
+            color: white;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(255,255,255,0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+
+        .role-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: #dc2626;
+            color: white;
+        }
+
+        .role-badge.employee {
+            background: #10b981;
+        }
+
+        .logout-btn {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .logout-btn:hover {
+            background: #b91c1c;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Page Header */
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 1.8rem;
+            color: #1e293b;
+        }
+
+        .page-header p {
+            color: #64748b;
+            margin-top: 0.5rem;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: #1e293b;
+            border-left: 4px solid #4c6ef5;
+            padding-left: 0.75rem;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #334155;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #4c6ef5;
+            box-shadow: 0 0 0 3px rgba(76,110,245,0.1);
+        }
+
+        /* Grid */
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        /* Buttons */
+        .btn {
+            background: #4c6ef5;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background: #3b5bdb;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: #64748b;
+        }
+
+        .btn-secondary:hover {
+            background: #475569;
+        }
+
+        .btn-small {
+            background: #4c6ef5;
+            color: white;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: #f8fafc;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-paid {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-pending {
+            background: #fed7aa;
+            color: #9b2c1d;
+        }
+
+        /* Item Rows */
+        .item-row {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            align-items: center;
+        }
+
+        .item-row input:first-child {
+            flex: 2;
+        }
+
+        .item-row input:nth-child(2) {
+            flex: 1;
+        }
+
+        .remove-item {
+            background: #fee2e2;
+            color: #dc2626;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .total-amount {
+            background: #f1f5f9;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            text-align: right;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        /* Payment Method */
+        .payment-method {
+            display: flex;
+            gap: 15px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .payment-option {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+            background: white;
+        }
+
+        .payment-option.selected {
+            border-color: #4c6ef5;
+            background: #eef2ff;
+            color: #1e40af;
+        }
+
+        .payment-details {
+            display: none;
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-top: 1rem;
+        }
+
+        .payment-details.show {
+            display: block;
+        }
+
+        /* Search Section */
+        .search-section {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .search-controls {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+            flex: 1;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-box input {
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            width: 100%;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e2e8f0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover {
+            background: #f1f5f9;
+        }
+
+        .filter-btn.active {
+            background: #4c6ef5;
+            color: white;
+            border-color: #4c6ef5;
+        }
+
+        .print-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .print-btn:hover {
+            background: #218838;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background: white;
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 2rem;
+            border-radius: 16px;
+            position: relative;
+        }
+
+        .close-modal {
+            float: right;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #94a3b8;
+        }
+
+        /* Bill Number */
+        .bill-number {
+            font-family: monospace;
+            font-weight: bold;
+            background: #fef3c7;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        /* Stat Cards */
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #1e293b;
+        }
+
+        /* Login Page Styles */
+        .login-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: linear-gradient(125deg, #0a2f44 0%, #0b3b2f 40%, #0a2f44 100%);
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 0;
+            overflow: hidden;
+            width: 100%;
+            max-width: none;
+            box-shadow: 0 35px 65px rgba(0,0,0,0.35);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .login-left {
+            flex: 1 1 50%;
+            min-width: 260px;
+            max-width: 60%;
+            background: #eef2ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-left img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .login-right {
+            flex: 1 1 50%;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            justify-content: center;
+        }
+
+        .login-header {
+            background: linear-gradient(115deg, #0a2f44 0%, #0e4a3a 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .login-header h1 {
+            font-size: 1.8rem;
+        }
+
+        .login-body {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .login-body form {
+            width: 100%;
+            max-width: 420px;
+            margin: 0 auto;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            background: #f1f5f9;
+            padding: 0.5rem;
+            border-radius: 60px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 50px;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: #0f5b44;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.06);
+        }
+
+        .error-message {
+            padding: 0.85rem;
+            border-radius: 32px;
+            margin-bottom: 1.2rem;
+            display: none;
+            text-align: center;
+            background: #fee8e7;
+            color: #c0392b;
+        }
+
+        .success-message {
+            background: #e0f7ef;
+            color: #1e6f5c;
+        }
+
+        @media (max-width: 768px) {
+            .row {
+                grid-template-columns: 1fr;
+            }
+            .navbar-menu {
+                width: 100%;
+                justify-content: center;
+            }
+            .search-controls {
+                flex-direction: column;
+                width: 100%;
+            }
+            .filter-buttons {
+                justify-content: center;
+            }
+            .login-card {
+                flex-direction: column;
+                width: 100%;
+            }
+            .login-left {
+                max-width: 100%;
+                height: 200px;
+            }
+            .login-left img {
+                height: 100%;
+                object-fit: cover;
+            }
+            .login-right {
+                padding: 1rem 1.25rem;
+            }
+        }
+
+        @media print {
+            .navbar, .search-section, .print-btn, .logout-btn, .modal, button {
+                display: none !important;
+            }
+            th:last-child, td:last-child {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script>
+        // ==================== DATA MANAGEMENT ====================
+        // Backend URL (adjust if your Flask server runs on a different port)
+        const BACKEND_URL = 'http://localhost:5000';
+        function getData() {
+            const defaultData = { customers: [], purchases: [], payments: [] };
+            const stored = localStorage.getItem("vigneswara_data");
+            return stored ? JSON.parse(stored) : defaultData;
+        }
+
+        function saveData(data) {
+            localStorage.setItem("vigneswara_data", JSON.stringify(data));
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        // ==================== AUTHENTICATION ====================
+        const ADMIN_CREDENTIALS = {
+            username: 'vrk',
+            password: '486979',
+            fullName: 'B.Ravi kishor',
+            email: 'vignaswarakishore@gmail.com',
+            role: 'admin'
+        };
+
+        function initializeUsers() {
+            const stored = localStorage.getItem('vigneswara_users');
+            if (!stored) {
+                const defaultUsers = {
+                    admin: [{
+                        id: 'admin_vrk',
+                        username: ADMIN_CREDENTIALS.username,
+                        password: ADMIN_CREDENTIALS.password,
+                        email: ADMIN_CREDENTIALS.email,
+                        fullName: ADMIN_CREDENTIALS.fullName,
+                        role: 'admin',
+                        createdAt: new Date().toISOString()
+                    }],
+                    employee: []
+                };
+                localStorage.setItem('vigneswara_users', JSON.stringify(defaultUsers));
+            }
+            return JSON.parse(localStorage.getItem('vigneswara_users'));
+        }
+
+        function getUser(identifier, role) {
+            const normalizedId = (identifier || '').trim().toLowerCase();
+            if (role === 'admin' && (normalizedId === ADMIN_CREDENTIALS.username.toLowerCase() || normalizedId === ADMIN_CREDENTIALS.email.toLowerCase())) {
+                return { ...ADMIN_CREDENTIALS };
+            }
+            const users = initializeUsers();
+            if (users[role]) {
+                return users[role].find(u => u.username.toLowerCase() === normalizedId || u.email.toLowerCase() === normalizedId);
+            }
+            return null;
+        }
+
+        function registerUser(userData) {
+            const users = initializeUsers();
+            if (users.employee.some(u => u.username === userData.username)) {
+                return { success: false, message: 'Username already taken.' };
+            }
+            if (users.employee.some(u => u.email === userData.email)) {
+                return { success: false, message: 'Email already registered.' };
+            }
+            userData.id = `emp_${Date.now()}`;
+            userData.role = 'employee';
+            userData.createdAt = new Date().toISOString();
+            users.employee.push(userData);
+            localStorage.setItem('vigneswara_users', JSON.stringify(users));
+            return { success: true, message: 'Employee registered successfully!' };
+        }
+
+        let currentUser = null;
+
+        function checkAuth() {
+            const session = localStorage.getItem('vigneswara_session');
+            if (!session) return null;
+            currentUser = JSON.parse(session);
+            return currentUser;
+        }
+
+        function logout() {
+            if (confirm("Are you sure you want to logout?")) {
+                localStorage.removeItem('vigneswara_session');
+                currentUser = null;
+                renderApp();
+            }
+        }
+
+        // ==================== PAGE RENDERING ====================
+        let currentPage = 'login';
+
+        function navigateTo(page) {
+            currentPage = page;
+            renderApp();
+        }
+
+        function getCustomerBalance(customerId) {
+            const data = getData();
+            const totalPurchases = data.purchases.filter(p => p.customerId === customerId).reduce((s, p) => s + p.total, 0);
+            const totalPaid = data.payments.filter(p => p.customerId === customerId).reduce((s, p) => s + p.amount, 0);
+            return totalPurchases - totalPaid;
+        }
+
+        function getRecentBillNumber(customerId) {
+            const data = getData();
+            const purchases = data.purchases.filter(p => p.customerId === customerId).sort((a, b) => b.id - a.id);
+            return purchases.length > 0 && purchases[0].billNumber ? purchases[0].billNumber : '-';
+        }
+
+        // ==================== MAIN RENDER FUNCTION ====================
+        function renderApp() {
+            const session = checkAuth();
+            
+            if (!session && currentPage !== 'login') {
+                currentPage = 'login';
+            }
+
+            if (currentPage === 'login') {
+                renderLoginPage();
+            } else if (currentPage === 'dashboard') {
+                renderDashboard();
+            } else if (currentPage === 'add-customer') {
+                renderAddCustomer();
+            } else if (currentPage === 'add-items') {
+                renderAddItems();
+            } else if (currentPage === 'payment') {
+                renderPayment();
+            } else if (currentPage === 'view-customers') {
+                renderViewCustomers();
+            }
+        }
+
+        // ==================== LOGIN PAGE ====================
+        function renderLoginPage() {
+            const html = `
+                <div class="login-wrapper">
+                    <div class="login-card">
+                        <div class="login-left">
+                            <!-- Use the local relative path to the image file in the same folder as index.html -->
+                            <img src="mainm.jpeg" alt="Welcome image">
+                        </div>
+                        <div class="login-right">
+                            <div class="login-header">
+                                <h1>🏭 Vigneswara Enterprises</h1>
+                                <p>Industrial Motors | Pumps | Engineering Excellence</p>
+                            </div>
+                            <div class="login-body">
+                                <div class="tab-buttons">
+                                    <button class="tab-btn active" onclick="switchLoginTab('login')">LOGIN</button>
+                                    <button class="tab-btn" onclick="switchLoginTab('register')">REGISTER</button>
+                                </div>
+                                <!-- backend health check removed -->
+                                <div id="loginMessage" class="error-message" style="display:none;"></div>
+                                <div id="loginFormDiv">
+                                    <form id="loginFormElement">
+                                        <div class="form-group">
+                                            <label>USERNAME</label>
+                                            <input type="text" id="loginUsername" placeholder="Enter your username">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>PASSWORD</label>
+                                            <input type="password" id="loginPassword" placeholder="Enter your password">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>ROLE</label>
+                                            <select id="loginRole">
+                                                <option value="">-- Select Role --</option>
+                                                <option value="admin">Admin</option>
+                                                <option value="employee">Employee</option>
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="btn">Sign In</button>
+                                    </form>
+                                </div>
+                                <div id="registerFormDiv" style="display:none;">
+                                    <form id="registerFormElement">
+                                        <div class="form-group">
+                                            <label>Full Name</label>
+                                            <input type="text" id="regFullName" placeholder="Enter your full name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Username</label>
+                                            <input type="text" id="regUsername" placeholder="Choose a username">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Email</label>
+                                            <input type="email" id="regEmail" placeholder="you@example.com">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Password</label>
+                                            <input type="password" id="regPassword" placeholder="Create password (min 6)">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Confirm Password</label>
+                                            <input type="password" id="regConfirmPassword" placeholder="Confirm password">
+                                        </div>
+                                        <button type="submit" class="btn">Register as Employee</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('app').innerHTML = html;
+            
+            window.switchLoginTab = function(tab) {
+                const loginDiv = document.getElementById('loginFormDiv');
+                const regDiv = document.getElementById('registerFormDiv');
+                const btns = document.querySelectorAll('.tab-btn');
+                btns.forEach((btn, i) => {
+                    if ((tab === 'login' && i === 0) || (tab === 'register' && i === 1)) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+                if (tab === 'login') {
+                    loginDiv.style.display = 'block';
+                    regDiv.style.display = 'none';
+                } else {
+                    loginDiv.style.display = 'none';
+                    regDiv.style.display = 'block';
+                }
+            };
+
+            
+            
+            document.getElementById('loginFormElement').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const username = document.getElementById('loginUsername').value.trim();
+                const password = document.getElementById('loginPassword').value;
+                const role = document.getElementById('loginRole').value;
+                const msgDiv = document.getElementById('loginMessage');
+                msgDiv.style.display = 'none';
+                if (!username || !password || !role) {
+                    msgDiv.textContent = 'Please fill all fields';
+                    msgDiv.style.display = 'block';
+                    return;
+                }
+                try {
+                    const res = await fetch(`${BACKEND_URL}/api/auth/login`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ username, password, role })
+                    });
+                    const data = await res.json();
+                    if (!res.ok) {
+                        msgDiv.textContent = data.message || 'Invalid credentials';
+                        msgDiv.style.display = 'block';
+                        return;
+                    }
+                    const user = data.user || {};
+                    const token = data.token || '';
+                    localStorage.setItem('vigneswara_token', token);
+                    const session = { username: user.username, role: user.role, name: user.fullName || user.username, email: user.email || '' };
+                    localStorage.setItem('vigneswara_session', JSON.stringify(session));
+                    currentUser = session;
+                    currentPage = 'dashboard';
+                    renderApp();
+                } catch (err) {
+                    msgDiv.textContent = `Unable to reach backend at ${BACKEND_URL}: ${err.message || err}.`;
+                    msgDiv.style.display = 'block';
+                    console.error('Login fetch error', err);
+                    // show backend status as well
+                    
+                }
+            });
+            
+            document.getElementById('registerFormElement').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const fullName = document.getElementById('regFullName').value.trim();
+                const username = document.getElementById('regUsername').value.trim();
+                const email = document.getElementById('regEmail').value.trim();
+                const password = document.getElementById('regPassword').value;
+                const confirm = document.getElementById('regConfirmPassword').value;
+                if (!fullName || !username || !email || !password) {
+                    alert('Please fill all fields');
+                    return;
+                }
+                if (password.length < 6) {
+                    alert('Password must be at least 6 characters');
+                    return;
+                }
+                if (password !== confirm) {
+                    alert('Passwords do not match');
+                    return;
+                }
+                try {
+                    const res = await fetch(`${BACKEND_URL}/api/auth/register`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ fullName, username, email, password })
+                    });
+                    const data = await res.json();
+                    if (!res.ok) {
+                        alert(data.message || 'Registration failed');
+                        return;
+                    }
+                    alert('Employee registered successfully! Please login.');
+                    switchLoginTab('login');
+                } catch (err) {
+                    alert(`Could not reach backend at ${BACKEND_URL}: ${err.message || err}`);
+                    console.error('Register fetch error', err);
+                    
+                }
+            });
+        }
+
+        // ==================== DASHBOARD ====================
+        function renderDashboard() {
+            const data = getData();
+            const totalCustomers = data.customers.length;
+            const totalPurchases = data.purchases.reduce((s, p) => s + p.total, 0);
+            const totalPayments = data.payments.reduce((s, p) => s + p.amount, 0);
+            const pendingBalance = totalPurchases - totalPayments;
+            
+            const recentTransactions = [...data.purchases.map(p => ({ ...p, type: 'Purchase' })), ...data.payments.map(p => ({ ...p, type: 'Payment' }))]
+                .sort((a, b) => b.id - a.id).slice(0, 10);
+            
+            const html = `
+                <nav class="navbar">${getNavbarHTML('dashboard')}</nav>
+                <div class="main-container">
+                    <div class="page-header">
+                        <h1>Welcome, ${escapeHtml(currentUser?.name || 'User')}!</h1>
+                        <p>${currentUser?.role === 'admin' ? 'You have full access to manage the system.' : 'You have view-only access.'}</p>
+                    </div>
+                    <!-- Stats cards removed as requested -->
+                    <div class="card">
+                        <h2 class="card-title">Recent Transactions</h2>
+                        <div class="table-container">
+                            <table>
+                                <thead><tr><th>Date</th><th>Bill/Receipt</th><th>Customer</th><th>Type</th><th>Amount</th></tr></thead>
+                                <tbody>
+                                    ${recentTransactions.map(t => `
+                                        <tr>
+                                            <td>${t.date || '-'}</td>
+                                            <td class="bill-number">${escapeHtml(t.billNumber || t.receiptNumber || '-')}</td>
+                                            <td>${escapeHtml(data.customers.find(c => c.id === t.customerId)?.name || 'Unknown')}</td>
+                                            <td><span class="status-badge ${t.type === 'Purchase' ? 'status-pending' : 'status-paid'}">${t.type}</span></td>
+                                            <td>₹${(t.total || t.amount || 0).toFixed(2)}</td>
+                                        </tr>
+                                    `).join('')}
+                                    ${recentTransactions.length === 0 ? '<tr><td colspan="5" style="text-align:center;">No transactions yet</td></tr>' : ''}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('app').innerHTML = html;
+        }
+
+        // ==================== ADD CUSTOMER ====================
+        function renderAddCustomer() {
+            const data = getData();
+            const recentCustomers = data.customers.slice(-5).reverse();
+            
+            const html = `
+                <nav class="navbar">${getNavbarHTML('add-customer')}</nav>
+                <div class="main-container">
+                    <div class="page-header"><h1>➕ Add New Customer</h1><p>Enter customer details to start the billing process</p></div>
+                    <div class="row">
+                        <div class="card">
+                            <form id="customerForm">
+                                <div class="form-group"><label>Full Name *</label><input type="text" id="customerName" required placeholder="Enter customer full name"></div>
+                                <div class="form-group"><label>Phone Number *</label><input type="tel" id="customerPhone" required placeholder="Enter 10-digit mobile number"></div>
+                                <div class="form-group"><label>Village / Area</label><input type="text" id="customerVillage" placeholder="Enter village or area name"></div>
+                                <div class="form-group"><label>Reference Name</label><input type="text" id="referenceName" placeholder="Who referred this customer?"></div>
+                                <div class="form-group"><label>Reference Phone Number</label><input type="tel" id="referencePhone" placeholder="Reference's phone number"></div>
+                                <button type="submit" class="btn">Save Customer & Continue to Add Items →</button>
+                            </form>
+                        </div>
+                        <div class="card">
+                            <h2 class="card-title">Recently Added Customers</h2>
+                            <div class="table-container"><table><thead><tr><th>Name</th><th>Phone</th><th>Village</th></tr></thead><tbody>
+                                ${recentCustomers.map(c => `<tr><td><strong>${escapeHtml(c.name)}</strong></td><td>${c.phone}</td><td>${c.village || '-'}</td></tr>`).join('')}
+                                ${recentCustomers.length === 0 ? '<tr><td colspan="3" style="text-align:center;">No customers yet</td></tr>' : ''}
+                            </tbody></table></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('app').innerHTML = html;
+            
+            document.getElementById('customerForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const customerData = {
+                    id: Date.now(),
+                    name: document.getElementById('customerName').value,
+                    phone: document.getElementById('customerPhone').value,
+                    village: document.getElementById('customerVillage').value,
+                    refName: document.getElementById('referenceName').value,
+                    refPhone: document.getElementById('referencePhone').value,
+                    addedDate: new Date().toISOString().split('T')[0]
+                };
+                const data = getData();
+                data.customers.push(customerData);
+                saveData(data);
+                alert(`✅ Customer "${customerData.name}" added successfully!`);
+                navigateTo('add-items');
+            });
+        }
+
+        // ==================== ADD ITEMS ====================
+        function renderAddItems() {
+            const data = getData();
+            const today = new Date().toISOString().split('T')[0];
+            const todayPurchases = data.purchases.filter(p => p.date === today).slice(-5).reverse();
+            
+            const html = `
+                <nav class="navbar">${getNavbarHTML('add-items')}</nav>
+                <div class="main-container">
+                    <div class="page-header"><h1>🛒 Add Items & Amount</h1><p>Record items purchased by customer</p></div>
+                    <div class="card">
+                        <form id="itemsForm">
+                            <div class="form-group"><label>Select Customer *</label><select id="customerSelect" required><option value="">Choose a customer...</option>${data.customers.map(c => `<option value="${c.id}">${escapeHtml(c.name)} (${c.phone})</option>`).join('')}</select></div>
+                            <div class="form-group"><label>Bill Number *</label><input type="text" id="billNumberInput" required placeholder="Enter bill number (e.g., BILL-001)"></div>
+                            <h3>Items Purchased</h3>
+                            <div id="itemsContainer"><div class="item-row"><input type="text" class="itemName" placeholder="Item name" required><input type="number" class="itemAmount" placeholder="Amount (₹)" min="0" step="0.01" required><span class="remove-item" onclick="this.parentElement.remove(); updateTotal()">×</span></div></div>
+                            <button type="button" class="btn btn-secondary" onclick="addItemRow()">+ Add Another Item</button>
+                            <div class="total-amount">Total Bill Amount: ₹<span id="totalAmount">0.00</span></div>
+                            <button type="submit" class="btn">Save Purchase & Go to Payment →</button>
+                        </form>
+                    </div>
+                    <div class="card"><h2 class="card-title">Today's Purchases</h2><div class="table-container"><table><thead><tr><th>Bill No.</th><th>Customer</th><th>Items</th><th>Total</th><th>Time</th></tr></thead><tbody>
+                        ${todayPurchases.map(p => `<tr><td class="bill-number">${escapeHtml(p.billNumber)}</td><td>${escapeHtml(data.customers.find(c => c.id === p.customerId)?.name || 'Unknown')}</td><td>${p.items.map(i => i.name).join(', ')}</td><td>₹${p.total.toFixed(2)}</td><td>${p.time}</td></tr>`).join('')}
+                    </tbody></table></div></div>
+                </div>
+            `;
+            document.getElementById('app').innerHTML = html;
+            
+            window.addItemRow = function() {
+                const container = document.getElementById('itemsContainer');
+                const div = document.createElement('div');
+                div.className = 'item-row';
+                div.innerHTML = '<input type="text" class="itemName" placeholder="Item name" required><input type="number" class="itemAmount" placeholder="Amount (₹)" min="0" step="0.01" required><span class="remove-item" onclick="this.parentElement.remove(); updateTotal()">×</span>';
+                container.appendChild(div);
+            };
+            
+            window.updateTotal = function() {
+                const amounts = document.querySelectorAll('.itemAmount');
+                let total = 0;
+                amounts.forEach(i => total += parseFloat(i.value) || 0);
+                document.getElementById('totalAmount').textContent = total.toFixed(2);
+            };
+            
+            document.addEventListener('input', function(e) {
+                if (e.target.classList && e.target.classList.contains('itemAmount')) window.updateTotal();
+            });
+            
+            document.getElementById('itemsForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const customerId = parseInt(document.getElementById('customerSelect').value);
+                const billNumber = document.getElementById('billNumberInput').value.trim();
+                if (!customerId) { alert('Please select a customer'); return; }
+                if (!billNumber) { alert('Please enter a bill number'); return; }
+                if (getData().purchases.some(p => p.billNumber === billNumber)) { alert('Bill number already exists!'); return; }
+                
+                const items = [];
+                const rows = document.querySelectorAll('.item-row');
+                rows.forEach(row => {
+                    const name = row.querySelector('.itemName').value;
+                    const amount = parseFloat(row.querySelector('.itemAmount').value);
+                    if (name && amount) items.push({ name, amount });
+                });
+                if (items.length === 0) { alert('Please add at least one item'); return; }
+                const total = items.reduce((s, i) => s + i.amount, 0);
+                const purchaseData = { id: Date.now(), customerId, items, total, billNumber, date: new Date().toISOString().split('T')[0], time: new Date().toLocaleTimeString() };
+                const data = getData();
+                data.purchases.push(purchaseData);
+                saveData(data);
+                alert(`✅ Purchase recorded! Bill: ${billNumber}, Total: ₹${total.toFixed(2)}`);
+                navigateTo('payment');
+            });
+        }
+
+        // ==================== PAYMENT ====================
+        function renderPayment() {
+            const data = getData();
+            const recentPayments = [...data.payments].reverse().slice(0, 10);
+            
+            const html = `
+                <nav class="navbar">${getNavbarHTML('payment')}</nav>
+                <div class="main-container">
+                    <div class="page-header"><h1>💰 Record Payment</h1><p>Cash | PhonePe | Mixed Payment</p></div>
+                    <div class="row">
+                        <div class="card">
+                            <form id="paymentForm">
+                                <div class="form-group"><label>Select Customer *</label><select id="customerSelect" required><option value="">Choose a customer...</option>${data.customers.map(c => `<option value="${c.id}">${escapeHtml(c.name)} (${c.phone})</option>`).join('')}</select></div>
+                                <div id="balanceInfo" class="card" style="display:none; padding:10px;"><div>Total Purchases: <strong id="totalPurchases">₹0</strong></div><div>Total Paid: <strong id="totalPaid">₹0</strong></div><div>Balance: <strong id="currentBalance">₹0</strong></div></div>
+                                <div class="form-group"><label>Receipt Number *</label><input type="text" id="receiptNumberInput" required placeholder="Enter unique receipt number"></div>
+                                <div class="form-group"><label>Payment Method</label><div class="payment-method"><div class="payment-option selected" data-method="mixed" onclick="selectPaymentMethod('mixed')">🔄 Mixed</div><div class="payment-option" data-method="cash" onclick="selectPaymentMethod('cash')">💵 Cash</div><div class="payment-option" data-method="phonepe" onclick="selectPaymentMethod('phonepe')">📱 PhonePe</div></div><input type="hidden" id="selectedPaymentMethod" value="mixed"></div>
+                                <div id="mixedDetails" class="payment-details show"><div class="split-payment-row"><div class="form-group"><label>Cash Amount</label><input type="number" id="cashAmount" step="0.01" oninput="updateSplitTotal()"></div><div class="form-group"><label>PhonePe Amount</label><input type="number" id="phonepeAmount" step="0.01" oninput="updateSplitTotal()"></div></div><div>Total: ₹<span id="splitTotal">0.00</span></div><div class="form-group"><label>Cash Date</label><input type="date" id="cashPaymentDate"></div><div class="form-group"><label>Phone Number</label><input type="tel" id="phoneNumber"></div><div class="form-group"><label>Transaction ID</label><input type="text" id="transactionId"></div><div class="form-group"><label>PhonePe Date</label><input type="date" id="phonepePaymentDate"></div></div>
+                                <div id="cashDetails" class="payment-details"><div class="form-group"><label>Cash Amount</label><input type="number" id="cashAmountOnly" step="0.01"></div><div class="form-group"><label>Payment Date</label><input type="date" id="cashOnlyDate"></div></div>
+                                <div id="phonepeDetails" class="payment-details"><div class="form-group"><label>PhonePe Amount</label><input type="number" id="phonepeAmountOnly" step="0.01"></div><div class="form-group"><label>Phone Number</label><input type="tel" id="phonepeNumberOnly"></div><div class="form-group"><label>Transaction ID</label><input type="text" id="transactionIdOnly"></div><div class="form-group"><label>Payment Date</label><input type="date" id="phonepeOnlyDate"></div></div>
+                                <button type="submit" class="btn">Record Payment</button>
+                            </form>
+                        </div>
+                        <div class="card"><h2 class="card-title">Recent Payments</h2><div class="table-container"><table><thead><tr><th>Receipt No</th><th>Date</th><th>Customer</th><th>Amount</th><th>Method</th></tr></thead><tbody>
+                            ${recentPayments.map(p => `<tr><td class="bill-number">${escapeHtml(p.receiptNumber)}</td><td>${p.date}</td><td>${escapeHtml(data.customers.find(c => c.id === p.customerId)?.name || 'Unknown')}</td><td>₹${p.amount.toFixed(2)}</td><td>${p.method}</td>`).join('')}
+                        </tbody></table></div></div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('app').innerHTML = html;
+            
+            const today = new Date().toISOString().split('T')[0];
+            if(document.getElementById('cashPaymentDate')) document.getElementById('cashPaymentDate').value = today;
+            if(document.getElementById('phonepePaymentDate')) document.getElementById('phonepePaymentDate').value = today;
+            if(document.getElementById('cashOnlyDate')) document.getElementById('cashOnlyDate').value = today;
+            if(document.getElementById('phonepeOnlyDate')) document.getElementById('phonepeOnlyDate').value = today;
+            
+            window.selectPaymentMethod = function(method) {
+                document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
+                document.querySelector(`.payment-option[data-method="${method}"]`).classList.add('selected');
+                document.getElementById('selectedPaymentMethod').value = method;
+                document.getElementById('mixedDetails').classList.remove('show');
+                document.getElementById('cashDetails').classList.remove('show');
+                document.getElementById('phonepeDetails').classList.remove('show');
+                if (method === 'mixed') document.getElementById('mixedDetails').classList.add('show');
+                else if (method === 'cash') document.getElementById('cashDetails').classList.add('show');
+                else document.getElementById('phonepeDetails').classList.add('show');
+            };
+            
+            window.updateSplitTotal = function() {
+                const cash = parseFloat(document.getElementById('cashAmount')?.value) || 0;
+                const phonepe = parseFloat(document.getElementById('phonepeAmount')?.value) || 0;
+                const totalSpan = document.getElementById('splitTotal');
+                if (totalSpan) totalSpan.textContent = (cash + phonepe).toFixed(2);
+            };
+            
+            document.getElementById('customerSelect').addEventListener('change', function() {
+                const id = parseInt(this.value);
+                if (!id) return;
+                const totalPurchases = getData().purchases.filter(p => p.customerId === id).reduce((s, p) => s + p.total, 0);
+                const totalPaid = getData().payments.filter(p => p.customerId === id).reduce((s, p) => s + p.amount, 0);
+                const balance = totalPurchases - totalPaid;
+                document.getElementById('totalPurchases').innerHTML = `₹${totalPurchases.toFixed(2)}`;
+                document.getElementById('totalPaid').innerHTML = `₹${totalPaid.toFixed(2)}`;
+                document.getElementById('currentBalance').innerHTML = `₹${balance.toFixed(2)}`;
+                document.getElementById('balanceInfo').style.display = 'block';
+                window.currentBalanceVal = balance;
+            });
+            
+            document.getElementById('paymentForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const customerId = parseInt(document.getElementById('customerSelect').value);
+                const receiptNumber = document.getElementById('receiptNumberInput').value.trim();
+                const method = document.getElementById('selectedPaymentMethod').value;
+                if (!customerId) { alert('Select customer'); return; }
+                if (!receiptNumber) { alert('Enter receipt number'); return; }
+                if (getData().payments.some(p => p.receiptNumber === receiptNumber)) { alert('Receipt number exists!'); return; }
+                
+                let amount = 0, paymentData = { id: Date.now(), customerId, method, receiptNumber, date: new Date().toISOString().split('T')[0] };
+                
+                if (method === 'cash') {
+                    amount = parseFloat(document.getElementById('cashAmountOnly').value);
+                    const date = document.getElementById('cashOnlyDate').value;
+                    if (!amount || amount <= 0) { alert('Enter valid amount'); return; }
+                    paymentData.amount = amount;
+                    paymentData.paymentDate = date;
+                } else if (method === 'phonepe') {
+                    amount = parseFloat(document.getElementById('phonepeAmountOnly').value);
+                    const phone = document.getElementById('phonepeNumberOnly').value;
+                    const txId = document.getElementById('transactionIdOnly').value;
+                    const date = document.getElementById('phonepeOnlyDate').value;
+                    if (!amount || amount <= 0 || !phone || !txId) { alert('Fill all details'); return; }
+                    paymentData.amount = amount;
+                    paymentData.phoneNumber = phone;
+                    paymentData.transactionId = txId;
+                    paymentData.paymentDate = date;
+                } else {
+                    const cashAmt = parseFloat(document.getElementById('cashAmount').value) || 0;
+                    const phonepeAmt = parseFloat(document.getElementById('phonepeAmount').value) || 0;
+                    amount = cashAmt + phonepeAmt;
+                    if (amount <= 0) { alert('Enter at least one amount'); return; }
+                    paymentData.amount = amount;
+                    paymentData.cashAmount = cashAmt;
+                    paymentData.phonepeAmount = phonepeAmt;
+                    paymentData.cashPaymentDate = document.getElementById('cashPaymentDate').value;
+                    paymentData.phoneNumber = document.getElementById('phoneNumber').value;
+                    paymentData.transactionId = document.getElementById('transactionId').value;
+                    paymentData.phonepePaymentDate = document.getElementById('phonepePaymentDate').value;
+                }
+                
+                const data = getData();
+                data.payments.push(paymentData);
+                saveData(data);
+                alert(`✅ Payment recorded! Receipt: ${receiptNumber}, Amount: ₹${amount.toFixed(2)}`);
+                navigateTo('view-customers');
+            });
+        }
+
+        // ==================== VIEW CUSTOMERS ====================
+        function renderViewCustomers() {
+            const data = getData();
+            let currentFilter = 'all';
+            
+            const html = `
+                <nav class="navbar">${getNavbarHTML('view-customers')}</nav>
+                <div class="main-container">
+                    <div class="page-header">
+                        <h1>👥 Customer Details</h1>
+                        <div class="search-section">
+                            <div class="search-controls">
+                                <div class="search-box">
+                                    <input type="text" id="searchInput" placeholder="🔍 Search..." onkeyup="filterCustomers()">
+                                </div>
+                                <div class="filter-buttons">
+                                    <button class="filter-btn active" data-filter="all" onclick="setFilter('all')">All</button>
+                                    <button class="filter-btn" data-filter="name" onclick="setFilter('name')">Name</button>
+                                    <button class="filter-btn" data-filter="phone" onclick="setFilter('phone')">Phone</button>
+                                    <button class="filter-btn" data-filter="village" onclick="setFilter('village')">Village</button>
+                                </div>
+                            </div>
+                            <button class="print-btn" onclick="printCustomerList()">🖨️ Print</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="table-container">
+                            <table id="customersTable">
+                                <thead>
+                                    <tr><th>Name</th><th>Phone</th><th>Village</th><th>Recent Bill</th><th>Total Purchases</th><th>Total Paid</th><th>Balance</th><th>Status</th><th>Action</th></tr>
+                                </thead>
+                                <tbody id="customersTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div id="customerModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close-modal" onclick="closeModal()">&times;</span>
+                        <h2 id="modalTitle">Customer Details</h2>
+                        <div id="modalBody"></div>
+                        <button class="btn-small" onclick="goToPaymentFromModal()">Record Payment</button>
+                    </div>
+                </div>
+            `;
+            document.getElementById('app').innerHTML = html;
+            
+            window.currentSelectedCustomer = null;
+            
+            window.setFilter = function(filter) {
+                currentFilter = filter;
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    if (btn.getAttribute('data-filter') === filter) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+                filterCustomers();
+            };
+            
+            window.filterCustomers = function() {
+                const searchTerm = document.getElementById('searchInput')?.value.toLowerCase() || '';
+                let filtered = [...data.customers];
+                
+                if (searchTerm) {
+                    filtered = data.customers.filter(c => {
+                        if (currentFilter === 'all') {
+                            return c.name.toLowerCase().includes(searchTerm) || 
+                                   c.phone.includes(searchTerm) || 
+                                   (c.village || '').toLowerCase().includes(searchTerm);
+                        } else if (currentFilter === 'name') {
+                            return c.name.toLowerCase().includes(searchTerm);
+                        } else if (currentFilter === 'phone') {
+                            return c.phone.includes(searchTerm);
+                        } else if (currentFilter === 'village') {
+                            return (c.village || '').toLowerCase().includes(searchTerm);
+                        }
+                        return false;
+                    });
+                }
+                
+                const tbody = document.getElementById('customersTableBody');
+                if (!tbody) return;
+                
+                tbody.innerHTML = filtered.map(c => {
+                    const totalPurchases = data.purchases.filter(p => p.customerId === c.id).reduce((s, p) => s + p.total, 0);
+                    const totalPaid = data.payments.filter(p => p.customerId === c.id).reduce((s, p) => s + p.amount, 0);
+                    const balance = totalPurchases - totalPaid;
+                    const status = balance <= 0 ? 'Paid' : 'Pending';
+                    const statusClass = balance <= 0 ? 'status-paid' : 'status-pending';
+                    return `
+                        <tr>
+                            <td><strong>${escapeHtml(c.name)}</strong></td>
+                            <td>${c.phone}</td>
+                            <td>${c.village || '-'}</td>
+                            <td><span class="bill-number">${getRecentBillNumber(c.id)}</span></td>
+                            <td>₹${totalPurchases.toFixed(2)}</td>
+                            <td>₹${totalPaid.toFixed(2)}</td>
+                            <td style="color:${balance>0?'#dc2626':'#10b981'}">₹${balance.toFixed(2)}</td>
+                            <td><span class="status-badge ${statusClass}">${status}</span></td>
+                            <td><button class="btn-small" onclick="showCustomerDetails(${c.id})">View</button></td>
+                        </tr>
+                    `;
+                }).join('');
+                
+                if (filtered.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center">No customers found</td></tr>';
+                }
+            };
+            
+            window.showCustomerDetails = function(id) {
+                const customer = data.customers.find(c => c.id === id);
+                window.currentSelectedCustomer = id;
+                const purchases = data.purchases.filter(p => p.customerId === id);
+                const payments = data.payments.filter(p => p.customerId === id);
+                const totalPurchases = purchases.reduce((s, p) => s + p.total, 0);
+                const totalPaid = payments.reduce((s, p) => s + p.amount, 0);
+                let details = `<div class="info-section">
+                    <p><strong>Name:</strong> ${escapeHtml(customer.name)}</p>
+                    <p><strong>Phone:</strong> ${customer.phone}</p>
+                    <p><strong>Village:</strong> ${customer.village || '-'}</p>
+                    <p><strong>Balance:</strong> ₹${(totalPurchases - totalPaid).toFixed(2)}</p>
+                </div>`;
+                details += '<h3>Purchases</h3><table><thead><tr><th>Bill No</th><th>Date</th><th>Total</th></tr></thead><tbody>' + 
+                    purchases.map(p => `<tr><td class="bill-number">${escapeHtml(p.billNumber)}</td><td>${p.date}</td><td>₹${p.total.toFixed(2)}</td></tr>`).join('') + 
+                    '</tbody></table>';
+                details += '<h3>Payments</h3><table><thead><tr><th>Receipt No</th><th>Date</th><th>Amount</th></tr></thead><tbody>' + 
+                    payments.map(p => `<tr><td class="bill-number">${escapeHtml(p.receiptNumber)}</td><td>${p.date}</td><td>₹${p.amount.toFixed(2)}</td></tr>`).join('') + 
+                    '</tbody></table>';
+                document.getElementById('modalTitle').innerHTML = customer.name;
+                document.getElementById('modalBody').innerHTML = details;
+                document.getElementById('customerModal').style.display = 'block';
+            };
+            
+            window.closeModal = function() { 
+                document.getElementById('customerModal').style.display = 'none'; 
+            };
+            
+            window.goToPaymentFromModal = function() { 
+                if (window.currentSelectedCustomer) navigateTo('payment'); 
+            };
+            
+            window.printCustomerList = function() { 
+                window.print(); 
+            };
+            
+            filterCustomers();
+            
+            window.onclick = function(e) { 
+                if (e.target === document.getElementById('customerModal')) closeModal(); 
+            };
+        }
+
+        // ==================== HELPER ====================
+        function getNavbarHTML(active) {
+            const isEmployee = currentUser && currentUser.role === 'employee';
+            return `
+                <div class="navbar-brand" onclick="navigateTo('dashboard')">🏭 Vigneswara Enterprises</div>
+                <div class="navbar-menu">
+                    <button class="nav-item ${active === 'dashboard' ? 'active' : ''}" onclick="navigateTo('dashboard')">Dashboard</button>
+                    ${isEmployee ? '' : `<button class="nav-item ${active === 'add-customer' ? 'active' : ''}" onclick="navigateTo('add-customer')">Add Customer</button>`}
+                    ${isEmployee ? '' : `<button class="nav-item ${active === 'add-items' ? 'active' : ''}" onclick="navigateTo('add-items')">Add Items</button>`}
+                    ${isEmployee ? '' : `<button class="nav-item ${active === 'payment' ? 'active' : ''}" onclick="navigateTo('payment')">Payment</button>`}
+                    <button class="nav-item ${active === 'view-customers' ? 'active' : ''}" onclick="navigateTo('view-customers')">View Customers</button>
+                    <div class="user-info"><span>👤 ${escapeHtml(currentUser?.name || 'User')}</span><span class="role-badge">${currentUser?.role === 'admin' ? 'Admin' : 'Employee'}</span></div>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
+                </div>
+            `;
+        }
+
+        // Initialize
+        initializeUsers();
+        renderApp();
+        
+        window.navigateTo = navigateTo;
+        window.logout = logout;
+    </script>
+</body>
+</html>
